@@ -1,9 +1,10 @@
-var express = require('express');
-var router = express.Router();
+var UserModel = require("./../models/user").User;
+var title = "哩噜电影";
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+exports.login = function(req, res, next) {
+  res.render('login', {title: (title + " | 登录")});
+};
 
-module.exports = router;
+exports.logout = function(req, res, next) {
+  res.json();
+};
