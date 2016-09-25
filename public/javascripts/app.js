@@ -1,15 +1,11 @@
-require("./../stylesheets/style.css");
+/*
+ *
+ */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
+import HomePage from './Home';
 
-
-const App = () => (
-  <MuiThemeProvider>
-    <AppBar title="哩噜电影" />
-  </MuiThemeProvider>
+ReactDOM.render(
+  <HomePage />, document.getElementById('app')
 );
-
-ReactDOM.render(<App />, document.getElementById('app'));

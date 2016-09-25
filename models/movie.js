@@ -6,6 +6,8 @@ var _Movie = new MovieSchema({
   title:          String,
   description:    String,
   download_link:  String,
+  author:         String,
+  img:            String,
   tags:           { type: [String], index: true },
   created_at:     { type: Date, default: Date.now },
   meta: {
