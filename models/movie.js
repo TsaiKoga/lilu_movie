@@ -1,5 +1,14 @@
 var mongoose = require("mongoose");
+// 连接数据库
+var db = mongoose.createConnection('mongodb://127.0.0.1:27017/lilu_movie');
 
+// 链接错误
+db.on('error', function(error) {
+  console.log(error);
+});
+
+
+// 创建collection的schema，类似table
 var MovieSchema = mongoose.Schema;
 
 var _Movie = new MovieSchema({
@@ -16,4 +25,5 @@ var _Movie = new MovieSchema({
   }
 });
 
-exports.Movie = mongoose.model("Movie", _Movie);
+// 指定数据库这个collection，并导出orm
+exports.Movie = db.model("Movie", _Movie);

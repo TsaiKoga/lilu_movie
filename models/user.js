@@ -1,4 +1,5 @@
 var mongoose = require("mongoose");
+var db = mongoose.createConnection('mongodb://127.0.0.1:27017/lilu_movie');
 
 var UserSchema = mongoose.Schema;
 
@@ -9,4 +10,4 @@ var _User = new UserSchema({
   password: String
 });
 
-exports.User = mongoose.model('User', _User);
+exports.User = db.model('User', _User);
