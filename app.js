@@ -5,8 +5,7 @@ var express = require('express')
     , logger = require('morgan')
     , cookieParser = require('cookie-parser')
     , bodyParser = require('body-parser')
-    , routes = require('./routes/routes')
-    , users = require('./routes/users');
+    , routes = require('./routes/routes');
 
 var app = express();
 
