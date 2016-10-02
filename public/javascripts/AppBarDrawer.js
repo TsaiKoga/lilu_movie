@@ -7,7 +7,7 @@ const Tags = [
   "悬疑",
   "惊悚",
   "爱情",
-  "励志",
+  "科幻",
   "动作",
   "喜剧"
 ];
@@ -32,7 +32,7 @@ class AppBarDrawer extends React.Component {
           <Drawer open={this.state.open} docked={false}>
             <MenuItem key={"关闭边栏"} onTouchTap={this.handleClose}>{"关闭边栏"}</MenuItem>
             { Tags.map((tagName) => (
-              <MenuItem key={tagName}>{tagName}</MenuItem>
+              <MenuItem key={tagName} linkButton={true} href={"/movies?tags=" + tagName} >{tagName}</MenuItem>
             ))}
           </Drawer>
         </div>
