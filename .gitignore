@@ -1,3 +1,5 @@
 node_modules/**/**
+bundle.js
+common.js
 *.log
 .DS_Store

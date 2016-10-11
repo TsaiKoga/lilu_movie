@@ -8,7 +8,8 @@
       "webpack"
     ],
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server --hot --inline"
+    "dev": "webpack-dev-server --hot --inline",
+    "build": "NODE_ENV=production webpack -p --config ./webpack.production.config.js"
   },
   "dependencies": {
     "body-parser": "~1.15.1",
@@ -20,6 +21,7 @@
     "json-loader": "^0.5.4",
     "mongoose": "^4.6.0",
     "morgan": "~1.7.0",
+    "per-env": "^1.0.2",
     "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
