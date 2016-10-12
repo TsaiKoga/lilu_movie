@@ -3,10 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": [
-      "node ./bin/www",
-      "webpack"
-    ],
+    "start": "nodemon ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --hot --inline",
     "build": "NODE_ENV=production webpack -p --config ./webpack.production.config.js"
