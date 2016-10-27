@@ -9,3 +9,12 @@ exports.index = function(req, res, next) {
     res.send(movies);
   });
 };
+
+// GET: movies/:id
+exports.show = function(req, res, next) {
+  console.log(req.params.id);
+  Movie.findById(req.params.id, function(err, movie) {
+    if (err) return handleError(err);
+    res.send(movie);
+  })
+}

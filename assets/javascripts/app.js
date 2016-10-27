@@ -1,11 +1,12 @@
 /*
- *
+ * AppLayout+MoviesGridList => /
+ * AppLayout+MovieCardShow => /movies/1
  */
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import HomePage from './Home';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import AppLayout from './AppLayout'
 
 ReactDOM.render(
-  <HomePage />, document.getElementById('app')
-);
+  <AppLayout />, document.getElementById('app')
+)

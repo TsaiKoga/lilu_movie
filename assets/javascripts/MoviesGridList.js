@@ -1,8 +1,8 @@
-import React from 'react';
-import {GridList, GridTile} from 'material-ui/GridList';
-import IconButton from 'material-ui/IconButton';
-import Subheader from 'material-ui/Subheader';
-import StarBorder from 'material-ui/svg-icons/toggle/star-border';
+import React from 'react'
+import {GridList, GridTile} from 'material-ui/GridList'
+import IconButton from 'material-ui/IconButton'
+import Subheader from 'material-ui/Subheader'
+import StarBorder from 'material-ui/svg-icons/toggle/star-border'
 
 const GridStyles = {
   root: {
@@ -15,31 +15,27 @@ const GridStyles = {
     height: '100%',
     marginBottom: 24,
   },
-};
-
-
+}
 
 // 这是一个fetch请求返回数据的store
-let moviesStore = require("./../../stores/MoviesStore");
+let moviesStore = require("./../../stores/MoviesStore")
 
-class MovieGridList extends React.Component {
+class MoviesGridList extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       movies: []
-    };
-    this.getMovies();
+    }
+    this.getMovies()
   }
 
   getMovies() {
-    let self = this;
+    let self = this
     // 这里赋值给movies，由于没办法用return（那边是fetch，然后给res的），
     // 由于作用域的原因，也没有办法使用将外部变量作参数带入内部，然后内部赋值改变
     // 所以只能将外部变量做匿名函数内部的变量来回调处理，匿名函数的参数为另一个函数内部的值，扁平化，得画图才能明白，看起来绕，但是确实连贯的。
     // 这里当做【最外层】 ---调用---> getAllMovies ---调用---> callback匿名函数，（因为匿名函数做参数放在【最外层】）
-    moviesStore.getAllMovies(function(data) {
-      self.setState({movies: data});
-    });
+    moviesStore.getAllMovies((data) => (self.setState({movies: data})))
   }
 
   render() {
@@ -61,4 +57,4 @@ class MovieGridList extends React.Component {
   }
 }
 
-export default MovieGridList;
+export default MoviesGridList
