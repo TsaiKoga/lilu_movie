@@ -59,15 +59,22 @@ class AppLayout extends React.Component {
       this.setState({open: false})
     )
     this.setMovieTags = (tagName) => (
-      this.setState({tags: tagName})
+      this.setState({tags: tagName, movieId: null})
     )
   }
 
+  setMovieId(movieId) {
+    // ES6: 类中的 this 默认指向class的实例,当在函数外部调用它时，this会指向该方法运行时所在的环境；
+    // 这里的因为render之后被点击调用，在外部渲染后点击this为外部,所以在外部必须绑定这个类的实例this；
+    this.setState({movieId: movieId})
+  }
+
   renderMenuItems() {
+    let self = this
     return(
       Tags.map((tagName) => (
-        // 这里this.setMovieTags无法使用event.target，因为用的是原始的dom节点
-        <MenuItem key={tagName} onTouchTap={this.setMovieTags.bind(null, tagName)} >{tagName}</MenuItem>
+        // 这里this.setMovieTags无法使用event.target，因为用的是原始的dom节点,所以这里使用bind带参数
+        <MenuItem key={tagName} onTouchTap={this.setMovieTags.bind(self, tagName)} >{tagName}</MenuItem>
       ))
     )
   }
@@ -87,11 +94,12 @@ class AppLayout extends React.Component {
   }
 
   render() {
+    let self = this
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={LayoutStyles.container}>
           {this.renderAppBar()}
-          {this.state.movieId ? <MovieCardShow movieId={this.state.movieId} /> : <MoviesGridList tags={this.state.tags}/>}
+          {this.state.movieId ? <MovieCardShow movieId={this.state.movieId} /> : <MoviesGridList tags={this.state.tags} callbackParent={this.setMovieId.bind(this)}/>}
         </div>
       </MuiThemeProvider>
     )

@@ -30,7 +30,6 @@ class MoviesGridList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(JSON.stringify(this.props.tags), JSON.stringify(nextProps.tags))
     if(JSON.stringify(this.props.tags) !== JSON.stringify(nextProps.tags)) {
       this.getMovies(nextProps.tags)
     }
@@ -45,16 +44,19 @@ class MoviesGridList extends React.Component {
     moviesStore.getAllMovies(tags, (data) => (self.setState({movies: data})))
   }
 
+  setParentMovieId(movieId) {
+    this.props.callbackParent(movieId)
+  }
 
   renderMovieGrid(movie) {
     return (
       <GridTile
-        key={movie.img}
+        key={movie._id}
         title={movie.title}
         subtitle={<span>by <b>{movie.author}</b></span>}
         actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
       >
-        <img src={movie.img} />
+        <img src={movie.img} onTouchTap={this.setParentMovieId.bind(this, movie._id)}/>
       </GridTile>
     )
   }

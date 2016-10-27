@@ -7,3 +7,12 @@ body {
 a {
   color: #00B7FF;
 }
+
+.movieCard {
+  text-align: center;
+  width: 75%;
+  margin: 40px auto;
+}
+.movieCard div {
+  text-align: left;
+}
