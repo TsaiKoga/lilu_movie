@@ -45,22 +45,32 @@ class MoviesGridList extends React.Component {
     moviesStore.getAllMovies(tags, (data) => (self.setState({movies: data})))
   }
 
+
+  renderMovieGrid(movie) {
+    return (
+      <GridTile
+        key={movie.img}
+        title={movie.title}
+        subtitle={<span>by <b>{movie.author}</b></span>}
+        actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
+      >
+        <img src={movie.img} />
+      </GridTile>
+    )
+  }
+
+  renderMovieGrids() {
+    let self = this
+    return this.state.movies.map((movie) => (self.renderMovieGrid(movie)))
+  }
+
   render() {
     let title = (this.props.tags.length === 0 ? "电影" : `${this.props.tags}电影`)
 
     return (<div style={GridStyles.root}>
       <GridList cellHeight={400} padding={4} cols={4} style={GridStyles.gridList}>
         <Subheader>{title}</Subheader>
-        { this.state.movies.map((movie) => (
-          <GridTile
-            key={movie.img}
-            title={movie.title}
-            subtitle={<span>by <b>{movie.author}</b></span>}
-            actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
-          >
-            <img src={movie.img} />
-          </GridTile>
-        )) }
+        {this.renderMovieGrids()}
       </GridList>
     </div>)
   }

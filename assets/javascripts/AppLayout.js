@@ -63,23 +63,34 @@ class AppLayout extends React.Component {
     )
   }
 
+  renderMenuItems() {
+    return(
+      Tags.map((tagName) => (
+        // 这里this.setMovieTags无法使用event.target，因为用的是原始的dom节点
+        <MenuItem key={tagName} onTouchTap={this.setMovieTags.bind(null, tagName)} >{tagName}</MenuItem>
+      ))
+    )
+  }
+
+  renderAppBar() {
+    return (
+      <div>
+        <AppBar title="哩噜电影" onLeftIconButtonTouchTap={this.handleToggle} />
+        <div>
+          <Drawer open={this.state.open} docked={false}>
+            <MenuItem key={"关闭边栏"} onTouchTap={this.handleClose}>{"关闭边栏"}</MenuItem>
+            {this.renderMenuItems()}
+          </Drawer>
+        </div>
+      </div>
+    )
+  }
+
   render() {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={LayoutStyles.container}>
-          <div>
-            <AppBar title="哩噜电影" onLeftIconButtonTouchTap={this.handleToggle} />
-            <div>
-              <Drawer open={this.state.open} docked={false}>
-                <MenuItem key={"关闭边栏"} onTouchTap={this.handleClose}>{"关闭边栏"}</MenuItem>
-                { Tags.map((tagName) => (
-                  // 这里this.setMovieTags无法使用event.target，因为用的是原始的dom节点
-                  <MenuItem key={tagName} onTouchTap={this.setMovieTags.bind(null, tagName)} >{tagName}</MenuItem>
-                ))}
-              </Drawer>
-            </div>
-          </div>
-
+          {this.renderAppBar()}
           {this.state.movieId ? <MovieCardShow movieId={this.state.movieId} /> : <MoviesGridList tags={this.state.tags}/>}
         </div>
       </MuiThemeProvider>
