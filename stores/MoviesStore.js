@@ -5,6 +5,7 @@ class MoviesStore extends EventEmitter {
     super();
   }
 
+  //method: GET /movies/:id
   findMovie(id, callback) {
     var self = this;
     fetch('/movies/' + id).then(function(res) {
@@ -18,9 +19,11 @@ class MoviesStore extends EventEmitter {
     }, function(e) {console.log("Fetch Error: " + e)});
   }
 
-  getAllMovies(callback) {
+  //method: GET /movies
+  getAllMovies(tags, callback) {
     var self = this;
-    fetch("/movies").then(function(res) {
+    var url = (tags.length === 0 ? "/movies" : `/movies?tags=${tags}`);
+    fetch(url).then(function(res) {
       if(res.ok) {
         res.json().then(function(data) {
           callback(data);

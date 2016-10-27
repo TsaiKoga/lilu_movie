@@ -46,16 +46,20 @@ const Tags = [
 
 class AppLayout extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       open: false,
+      tags: [],
       movieId: null
-    };
+    }
     this.handleToggle = () => (
       this.setState({open: !this.state.open})
     )
     this.handleClose = () => (
       this.setState({open: false})
+    )
+    this.setMovieTags = (tagName) => (
+      this.setState({tags: tagName})
     )
   }
 
@@ -69,13 +73,14 @@ class AppLayout extends React.Component {
               <Drawer open={this.state.open} docked={false}>
                 <MenuItem key={"关闭边栏"} onTouchTap={this.handleClose}>{"关闭边栏"}</MenuItem>
                 { Tags.map((tagName) => (
-                  <MenuItem key={tagName} linkButton={true} href={"/movies?tags=" + tagName} >{tagName}</MenuItem>
+                  // 这里this.setMovieTags无法使用event.target，因为用的是原始的dom节点
+                  <MenuItem key={tagName} onTouchTap={this.setMovieTags.bind(null, tagName)} >{tagName}</MenuItem>
                 ))}
               </Drawer>
             </div>
           </div>
 
-          {this.state.movieId ? <MovieCardShow movieId={this.state.movieId}/> : <MoviesGridList />}
+          {this.state.movieId ? <MovieCardShow movieId={this.state.movieId} /> : <MoviesGridList tags={this.state.tags}/>}
         </div>
       </MuiThemeProvider>
     )
