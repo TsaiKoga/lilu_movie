@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
-var db = mongoose.createConnection('mongodb://127.0.0.1:27017/lilu_movie');
+var config = require("./../config")
+var db = mongoose.createConnection(config.db.mongoose);
 
 var UserSchema = mongoose.Schema;
 

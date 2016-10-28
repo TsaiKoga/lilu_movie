@@ -1,6 +1,7 @@
 var mongoose = require("mongoose");
+var config = require("./../config");
 // 连接数据库
-var db = mongoose.createConnection('mongodb://127.0.0.1:27017/lilu_movie');
+var db = mongoose.createConnection(config.db.mongoose);
 
 // 链接错误
 db.on('error', function(error) {
