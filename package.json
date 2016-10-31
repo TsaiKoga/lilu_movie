@@ -6,20 +6,26 @@
     "start": "nodemon ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --hot --inline",
-    "build": "NODE_ENV=production webpack -p --config ./webpack.production.config.js"
+    "build": "NODE_ENV=production webpack -p --config ./webpack.production.config.js",
+    "insert:data": "node spider.js"
   },
   "dependencies": {
     "body-parser": "~1.15.1",
+    "cheerio": "^0.22.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.2.0",
     "ejs": "^2.5.2",
     "express": "~4.13.4",
     "express-mongoose": "^0.1.0",
+    "iconv": "^2.2.1",
+    "iconv-lite": "^0.4.13",
     "json-loader": "^0.5.4",
     "mongoose": "^4.6.0",
     "morgan": "~1.7.0",
     "per-env": "^1.0.2",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "superagent": "^2.3.0",
+    "superagent-charset": "^1.1.1"
   },
   "devDependencies": {
     "babel-core": "^6.14.0",

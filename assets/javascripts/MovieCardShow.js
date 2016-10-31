@@ -26,6 +26,18 @@ class MovieCardShow extends React.Component {
     }
   }
 
+  // 由于文字中的\r\n在dom中会换行，而在浏览器压缩成空格，所以这里将它每一行变成<p>标签
+  renderTextWithBreakLine(text) {
+    if (text) {
+      console.log(text)
+      let lines = text.split(/\r\n/)
+      let formatted = lines.map((line) => {
+        return (<p>{line}</p>)
+      })
+      return (<div>{formatted}</div>)
+    }
+  }
+
   render() {
     return (
       <div className="movieCard">
@@ -41,7 +53,7 @@ class MovieCardShow extends React.Component {
           </CardMedia>
           <CardTitle title={this.state.movie.title} />
           <CardText>
-            {this.state.movie.description}
+            {this.renderTextWithBreakLine(this.state.movie.description)}
           </CardText>
           <CardActions>
             <Toggle

@@ -12,8 +12,11 @@ This is my first time to develop a website with nodejs.
 ### installation
     npm install
 
+### create datas
+    npm run insert:data
+
 ### run webpack-dev-server
     npm run dev
-    
+
 ### run app
     nodemon ./bin/www
