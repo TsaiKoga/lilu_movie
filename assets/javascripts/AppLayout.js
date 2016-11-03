@@ -87,6 +87,8 @@ class AppLayout extends React.Component {
           <Drawer open={this.state.open} docked={false}>
             <MenuItem key={"关闭边栏"} onTouchTap={this.handleClose}>{"关闭边栏"}</MenuItem>
             {this.renderMenuItems()}
+            <MenuItem key={"Login"} href='/users/login'>{"登录"}</MenuItem>
+            <MenuItem key={"Register"} href='/users/register'>{"注册"}</MenuItem>
           </Drawer>
         </div>
       </div>
@@ -100,6 +102,7 @@ class AppLayout extends React.Component {
         <div style={LayoutStyles.container}>
           {this.renderAppBar()}
           {this.state.movieId ? <MovieCardShow movieId={this.state.movieId} /> : <MoviesGridList tags={this.state.tags} callbackParent={this.setMovieId.bind(this)}/>}
+          {this.props.children}
         </div>
       </MuiThemeProvider>
     )

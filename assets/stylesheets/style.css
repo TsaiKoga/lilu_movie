@@ -16,3 +16,18 @@ a {
 .movieCard div {
   text-align: left;
 }
+
+.userForm {
+  /* 水平居中 */
+  text-align: center;
+  margin: auto;
+  /* 垂直居中 */
+  display: -webkit-flex;
+  display:         flex;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+  height: 500px;
+  min-height: 500px;
+}
