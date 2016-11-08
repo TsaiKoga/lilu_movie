@@ -4,6 +4,9 @@ import IconButton from 'material-ui/IconButton'
 import Subheader from 'material-ui/Subheader'
 import StarBorder from 'material-ui/svg-icons/toggle/star-border'
 
+import {connect} from 'react-redux'
+import * as Actions from '../../redux/actions/actions'
+
 const GridStyles = {
   root: {
     display: 'flex',
@@ -17,57 +20,33 @@ const GridStyles = {
   },
 }
 
-// 这是一个fetch请求返回数据的store
-let moviesStore = require("./../../stores/MoviesStore")
-
 class MoviesGridList extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      movies: []
-    }
-    this.getMovies(this.props.tags)
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if(JSON.stringify(this.props.tags) !== JSON.stringify(nextProps.tags)) {
-      this.getMovies(nextProps.tags)
-    }
-  }
-
-  getMovies(tags) {
-    let self = this
-    // 这里赋值给movies，由于没办法用return（那边是fetch，然后给res的），
-    // 由于作用域的原因，也没有办法使用将外部变量作参数带入内部，然后内部赋值改变
-    // 所以只能将外部变量做匿名函数内部的变量来回调处理，匿名函数的参数为另一个函数内部的值，扁平化，得画图才能明白，看起来绕，但是确实连贯的。
-    // 这里当做【最外层】 ---调用---> getAllMovies ---调用---> callback匿名函数，（因为匿名函数做参数放在【最外层】）
-    moviesStore.getAllMovies(tags, (data) => (self.setState({movies: data})))
-  }
-
-  setParentMovieId(movieId) {
-    this.props.callbackParent(movieId)
+  constructor(props, context) {
+    super(props, context)
   }
 
   renderMovieGrid(movie) {
     return (
-      <GridTile
-        key={movie._id}
-        title={movie.title}
-        subtitle={<span>by <b>{movie.author}</b></span>}
-        actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
-      >
-        <img src={movie.img} onTouchTap={this.setParentMovieId.bind(this, movie._id)}/>
-      </GridTile>
+      <a key={`link${movie._id}`} href={`/movies/${movie._id}`}>
+        <GridTile
+          key={movie._id}
+          title={movie.title}
+          subtitle={<span>by <b>{movie.author}</b></span>}
+          actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
+        >
+          <img src={movie.img}/>
+        </GridTile>
+      </a>
     )
   }
 
   renderMovieGrids() {
     let self = this
-    return this.state.movies.map((movie) => (self.renderMovieGrid(movie)))
+    return this.props.movies.map((movie) => (self.renderMovieGrid(movie)))
   }
 
   render() {
-    let title = (this.props.tags.length === 0 ? "电影" : `${this.props.tags}电影`)
+    let title = ((this.props.tags === undefined || this.props.tags.length === 0) ? "电影" : `${this.props.tags}电影`)
 
     return (<div style={GridStyles.root}>
       <GridList cellHeight={400} padding={4} cols={4} style={GridStyles.gridList}>
@@ -78,4 +57,16 @@ class MoviesGridList extends React.Component {
   }
 }
 
-export default MoviesGridList
+MoviesGridList.need = [function (params) {
+  return Actions.fetchMovies.bind(null, params)();
+}]
+
+// 将store最新的state.movies给props，
+function mapStateToProps(store) {
+  return {
+    tags: store.tags,
+    movies: store.movies
+  }
+}
+
+export default connect(mapStateToProps)(MoviesGridList)

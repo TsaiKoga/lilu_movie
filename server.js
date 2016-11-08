@@ -1,46 +1,70 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var compression = require('compression');
+import express from 'express'
+import path from 'path'
+import favicon from 'serve-favicon'
+import cookieParser from 'cookie-parser'
+import bodyParser from 'body-parser'
+import compression from 'compression'
 
-var React = require('react');
-var renderToString = require('react-dom/server').renderToString;
-var match = require('react-router').match;
-var RouterContext = require('react-router').RouterContext;
-var routes = require('./assets/javascripts/routes');
-var fetchDataBeforeRender = require("./stores/fetchDataBeforeRender");
+import React from 'react'
+import { renderToString } from 'react-dom/server'
+import { match } from 'react-router'
+import { RouterContext } from 'react-router'
+import routes from './assets/javascripts/routes'
 
-var app = express();
+import { Promise } from 'es6-promise'
+import { Provider } from 'react-redux'
+import configureStore from "./redux/configureStore"
 
-app.use(compression());
+import usersController from "./controllers/users"
+import moviesController from "./controllers/movies"
+import { fetchComponentDataBeforeRender } from './redux/fetchComponentDataBeforeRender'
+
+const app = express()
+
+app.use(compression())
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cookieParser())
+app.use(express.static(path.join(__dirname, 'public')))
 
-app.get('*', function (req, res) {
-  match({ routes: routes, location: req.url }, (err, redirect, renderProps) => {
+
+// 从mongodb中Fetch数据
+app.get('/api/movies', moviesController.index)
+app.get('/api/movies/:id', moviesController.show)
+
+
+// 根据react-router路由加载组件
+app.use((req, res) => {
+  match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
     if (err) {
-      res.status(500).send(err.message);
-    } else if(redirect) {
-      res.redirect(redirect.pathname + redirect.search);
-    } else if(renderProps) {
-      var initialState = {}
-      var initialView = renderToString(
-        <RouterContext {...renderProps} />
-      );
-      res.status(200).end(renderFullPage(initialView, initialState);
-    } else {
-      res.status(404).send('Not Found');
-    }
-  });
-});
+      res.status(500).end(`Internal Server Error ${err}`);
+    } else if (redirectLocation) {
+      res.redirect(redirectLocation.pathname + redirectLocation.search);
+    } else if (renderProps) {
+      const store = configureStore()
+      const state = store.getState()
+      const params = Object.assign(req.query, renderProps.params)
 
-function renderFullPage(appHtml, initialState) {
+      fetchComponentDataBeforeRender(store.dispatch, renderProps.components, params)
+      .then(() => {
+        // 这里redux的store给Provider，再通过mapStateToProps给对应的容器组件
+        const html = renderToString(
+          <Provider store={store}>
+            <RouterContext {...renderProps} />
+          </Provider>
+        )
+        res.end(renderFullPage(html, store.getState()));
+      })
+    } else {
+      res.status(404).end('Not found');
+    }
+  })
+})
+
+// 渲染页面
+const renderFullPage = (appHtml, initialState) => {
   return `
   <!DOCTYPE html>
   <html lang="en">
@@ -66,13 +90,16 @@ function renderFullPage(appHtml, initialState) {
   </body>
 
   <script type="text/javascript" src="http://localhost:8080/javascripts/bundle.js" charset="utf-8"></script>
-  <script type="text/javascript" src="javascripts/common.js" charset="utf-8"></script>
-  <script type="text/javascript" src="javascripts/bundle.js" charset="utf-8"></script>
+  <script type="text/javascript" src="http://localhost:3003/javascripts/common.js" charset="utf-8"></script>
+  <script type="text/javascript" src="http://localhost:3003/javascripts/bundle.js" charset="utf-8"></script>
   </html>
   `
 }
 
-var PORT = process.env.PORT || 3003;
-app.listen(PORT, function() {
-  console.log('Express server running at localhost:' + PORT);
-});
+// 服务监听
+const PORT = process.env.PORT || 3003;
+const server = app.listen(PORT, () => {
+  let host = server.address().address
+  let port = server.address().port
+  console.log('Express server listening at http://%s:%s', host, port)
+})

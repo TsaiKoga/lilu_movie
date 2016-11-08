@@ -2,17 +2,16 @@ import React from 'react'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 
+import { connect } from 'react-redux'
+import * as Actions from '../../redux/actions/actions'
+
 const style = {
   margin: 12,
 };
 
 class LoginForm extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      name: "",
-      password: "",
-    }
+  constructor(props, context) {
+    super(props, context)
   }
 
   handleLogin(e) {
@@ -41,4 +40,8 @@ class LoginForm extends React.Component {
   }
 }
 
-export default LoginForm
+function mapStateToProps(store) {
+  return {}
+}
+
+export default connect(mapStateToProps)(LoginForm)

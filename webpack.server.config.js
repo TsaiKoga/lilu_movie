@@ -3,7 +3,9 @@ var fs = require("fs");
 var path = require("path");
 
 module.exports = {
-  entry: path.resolve(__dirname, 'server.js'),
+  entry: [
+    path.resolve(__dirname, 'server.js')
+  ],
 
   output: {
     filename: 'server.bundle.js'
@@ -16,11 +18,6 @@ module.exports = {
     ext[mod] = 'commonjs ' + mod
     return ext
   }, {}),
-  plugins: [
-    new webpack.ProvidePlugin({
-            'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
-        })
-  ],
 
   node: {
     __filename: true,

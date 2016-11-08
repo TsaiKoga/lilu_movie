@@ -1,4 +1,3 @@
-require("./../stylesheets/style.css")
 import React from 'react'
 
 import AppBar from 'material-ui/AppBar'
@@ -13,6 +12,9 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import MoviesGridList from './MoviesGridList'
 import MovieCardShow from './MovieCardShow'
+
+import { connect } from 'react-redux'
+import * as Actions from './../../redux/actions/actions'
 
 injectTapEventPlugin()
 
@@ -44,37 +46,26 @@ const Tags = [
   "喜剧"
 ]
 
+/* 这是一个AppLayout的UI组件
+ * 这里面只能使用props，不能用redux的API
+ */
 class AppLayout extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      open: false,
-      tags: [],
-      movieId: null
-    }
+  constructor(props, context) {
+    super(props, context)
+    // 触发后dispatch立即执行内部action
     this.handleToggle = () => (
-      this.setState({open: !this.state.open})
+      this.props.dispatch(Actions.toggleDrawer(this.props.open))
     )
     this.handleClose = () => (
-      this.setState({open: false})
+      this.props.dispatch(Actions.handleClose())
     )
-    this.setMovieTags = (tagName) => (
-      this.setState({tags: tagName, movieId: null})
-    )
-  }
-
-  setMovieId(movieId) {
-    // ES6: 类中的 this 默认指向class的实例,当在函数外部调用它时，this会指向该方法运行时所在的环境；
-    // 这里的因为render之后被点击调用，在外部渲染后点击this为外部,所以在外部必须绑定这个类的实例this；
-    this.setState({movieId: movieId})
   }
 
   renderMenuItems() {
     let self = this
     return(
       Tags.map((tagName) => (
-        // 这里this.setMovieTags无法使用event.target，因为用的是原始的dom节点,所以这里使用bind带参数
-        <MenuItem key={tagName} onTouchTap={this.setMovieTags.bind(self, tagName)} >{tagName}</MenuItem>
+        <MenuItem key={tagName} href={`/movies?tags=${tagName}`} >{tagName}</MenuItem>
       ))
     )
   }
@@ -84,7 +75,7 @@ class AppLayout extends React.Component {
       <div>
         <AppBar title="哩噜电影" onLeftIconButtonTouchTap={this.handleToggle} />
         <div>
-          <Drawer open={this.state.open} docked={false}>
+          <Drawer open={this.props.open} docked={false}>
             <MenuItem key={"关闭边栏"} onTouchTap={this.handleClose}>{"关闭边栏"}</MenuItem>
             {this.renderMenuItems()}
             <MenuItem key={"Login"} href='/users/login'>{"登录"}</MenuItem>
@@ -97,11 +88,11 @@ class AppLayout extends React.Component {
 
   render() {
     let self = this
+    const { dispatch, open } = this.props;
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={LayoutStyles.container}>
           {this.renderAppBar()}
-          {this.state.movieId ? <MovieCardShow movieId={this.state.movieId} /> : <MoviesGridList tags={this.state.tags} callbackParent={this.setMovieId.bind(this)}/>}
           {this.props.children}
         </div>
       </MuiThemeProvider>
@@ -109,4 +100,19 @@ class AppLayout extends React.Component {
   }
 }
 
-export default AppLayout
+AppLayout.need = [function (params) {
+  return Actions.handleClose.bind(null)();
+}]
+
+function mapStateToProps(store) {
+  return {
+    open: store.open
+  }
+}
+
+
+/* 生成一个AppLayout容器组件
+ * 这里可以使用redux的API
+ * mapStateToProps作为参数，会自动根据state重新渲染组件
+ */
+export default connect(mapStateToProps)(AppLayout)

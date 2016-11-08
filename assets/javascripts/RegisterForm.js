@@ -2,14 +2,12 @@ import React from 'react'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 
+import { connect } from 'react-redux'
+import * as Actions from '../../redux/actions/actions'
+
 class RegisterForm extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      name: "无名氏",
-      email: "",
-      password: ""
-    }
+  constructor(props, context) {
+    super(props, context)
   }
 
   render() {
@@ -35,4 +33,8 @@ class RegisterForm extends React.Component {
   }
 }
 
-export default RegisterForm
+function mapStateToProps(store) {
+  return {}
+}
+
+export default connect(mapStateToProps)(RegisterForm)

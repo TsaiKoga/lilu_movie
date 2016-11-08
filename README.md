@@ -5,7 +5,7 @@ For learning express and react...
 ### Introduction
 This is my first time to develop a website with nodejs.
 
-**Lilu Movie** use express + react + mongodb.
+**Lilu Movie** use express + react + redux + react-router + mongoose.
 
 
 
@@ -15,8 +15,5 @@ This is my first time to develop a website with nodejs.
 ### create datas
     npm run insert:data
 
-### run webpack-dev-server
-    npm run dev
-
 ### run app
-    nodemon ./bin/www
+    NODE_ENV=production npm start
