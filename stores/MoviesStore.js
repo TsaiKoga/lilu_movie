@@ -1,3 +1,4 @@
+require("whatwg-fetch");
 var EventEmitter = require("events").EventEmitter;
 
 class MoviesStore extends EventEmitter {

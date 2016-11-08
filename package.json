@@ -3,22 +3,27 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server --hot --inline",
-    "build": "NODE_ENV=production webpack -p --config ./webpack.production.config.js",
-    "insert:data": "node spider.js"
+    "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
+    "start:dev": "webpack-dev-server --inline --content-base public/ --history-api-fallback",
+    "start:prod": "npm run build && node server.bundle.js",
+    "build:client": "webpack --config ./webpack.production.config.js",
+    "build:server": "webpack --config webpack.server.config.js",
+    "build": "npm run build:client && npm run build:server"
   },
   "dependencies": {
     "body-parser": "~1.15.1",
     "cheerio": "^0.22.0",
+    "compression": "^1.6.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.2.0",
     "ejs": "^2.5.2",
-    "express": "~4.13.4",
+    "exports-loader": "^0.6.3",
+    "express": "^4.13.4",
     "express-mongoose": "^0.1.0",
     "iconv": "^2.2.1",
     "iconv-lite": "^0.4.13",
+    "if-env": "^1.0.0",
+    "imports-loader": "^0.6.5",
     "json-loader": "^0.5.4",
     "mongoose": "^4.6.0",
     "morgan": "~1.7.0",
@@ -26,7 +31,8 @@
     "react-router": "^3.0.0",
     "serve-favicon": "~2.3.0",
     "superagent": "^2.3.0",
-    "superagent-charset": "^1.1.1"
+    "superagent-charset": "^1.1.1",
+    "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.14.0",
