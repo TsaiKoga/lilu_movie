@@ -13,11 +13,11 @@ db.on('error', function(error) {
 var MovieSchema = mongoose.Schema;
 
 var _Movie = new MovieSchema({
-  title:          String,
-  description:    String,
-  download_link:  String,
-  author:         String,
-  img:            String,
+  title:          { type: String, required: true },
+  description:    { type: String },
+  download_link:  { type: String },
+  author:         { type: String },
+  img:            { type: String, match: [/.+\.(jpg|png|jpeg|gif)$/] },
   tags:           { type: [String], index: true },
   created_at:     { type: Date, default: Date.now },
   meta: {
