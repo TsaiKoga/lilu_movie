@@ -34,9 +34,8 @@ var _User = new UserSchema({
 // Methods: User实例方法
 _User.method({
   authenticate: function (password, callback) {
-    bcrypt.compare(this.password, password, function(err, isMatch) {
-      if (err) return callback(err);
-      return callback(isMatch);
+    bcrypt.compare(password, this.password, function(err, isMatch) {
+      return callback(err, isMatch);
     });
   }
 });

@@ -1,6 +1,7 @@
 import fetch from "isomorphic-fetch"
 import * as ActionTypes from './../constants/constants'
 
+
 export function toggleDrawer(open) {
   return {
     type: ActionTypes.TOGGLE_DRAWER,
@@ -37,5 +38,35 @@ export function fetchMovie(movieId) {
     return fetch(`http://localhost:3003/api/movies/${movieId}`)
     .then(res => res.json())
     .then(movie => dispatch({type: ActionTypes.FETCH_MOVIE, movie: movie}));
+  }
+}
+
+export function login(data) {
+  console.log("login action: ", data)
+  return (dispatch) => {
+    return fetch(`http://localhost:3003/api/users/sign_in`, {
+      headers: {
+        // 'Content-Type': 'application/x-www-form-urlencoded'
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(data)
+    })
+  }
+}
+
+export function register(data) {
+  console.log("register action: ", JSON.stringify(data))
+  return (dispatch) => {
+    return fetch('http://localhost:3003/api/users/sign_up', {
+      headers: {
+        // 'Content-Type': 'application/x-www-form-urlencoded'
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(data)
+    })
   }
 }

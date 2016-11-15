@@ -19,6 +19,7 @@ import usersController from "./controllers/users"
 import moviesController from "./controllers/movies"
 import { fetchComponentDataBeforeRender } from './redux/fetchComponentDataBeforeRender'
 
+
 const app = express()
 
 app.use(compression())
@@ -33,6 +34,8 @@ app.use(express.static(path.join(__dirname, 'public')))
 // 从mongodb中Fetch数据
 app.get('/api/movies', moviesController.index)
 app.get('/api/movies/:id', moviesController.show)
+app.post('/api/users/sign_in', usersController.signIn)
+app.post('/api/users/sign_up', usersController.signUp)
 
 
 // 根据react-router路由加载组件

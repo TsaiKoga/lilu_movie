@@ -30,6 +30,7 @@
     "json-loader": "^0.5.4",
     "mongoose": "^4.6.0",
     "morgan": "~1.7.0",
+    "multer": "^1.2.0",
     "per-env": "^1.0.2",
     "react-redux": "^4.4.5",
     "react-router": "^3.0.0",
