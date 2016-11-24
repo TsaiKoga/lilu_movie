@@ -31,10 +31,7 @@ class RegisterForm extends React.Component {
   handleRegister(e) {
     e.preventDefault()
     this.setState({errors: {}, isLoading: true, registerLabel: "注册中..."})
-    this.props.register(this.state).then(
-      res => this.context.router.push("/"),
-      err => this.setState({errors: err})
-    )
+    this.props.register(this.state)
   }
 
   render() {

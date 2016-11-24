@@ -32,11 +32,8 @@ class LoginForm extends React.Component {
     // const email = this.refs.email.getValue()
     // const password = this.refs.password.getValue()
     this.setState({errors: {}, isLoading: true, loginLabel: "登录中..."})
-    this.props.login(this.state).then(
-      res => this.context.router.push("/"),
-      err => this.setState({errors: err})
-    )
-  }
+    this.props.login(this.state)
+   }
 
   render() {
     const {email, password, errors, isLoading, loginLabel} = this.state

@@ -1,6 +1,10 @@
 import fetch from "isomorphic-fetch"
 import * as ActionTypes from './../constants/constants'
+import { browserHistory } from 'react-router'
 
+const moviesUrl = "http://localhost:3003/api/movies"
+const userSignInUrl = "http://localhost:3003/api/users/sign_in"
+const userSignUpUrl = "http://localhost:3003/api/users/sign_up"
 
 export function toggleDrawer(open) {
   return {
@@ -23,19 +27,18 @@ export function toggleExpanded(expanded) {
   }
 }
 
-export function fetchMovies(params) {
+export function fetchMovies(params={}) {
   return (dispatch) => {
-    var url = (params.tags === undefined ? "http://localhost:3003/api/movies" : `http://localhost:3003/api/movies?tags=${encodeURIComponent(params.tags)}`)
-    return fetch(url)
-    .then(res => res.json())
-    .then(movies => dispatch(Object.assign({type: ActionTypes.FETCH_MOVIES, movies: movies}, params) ));
+    return fetchMoviesPromise().then(
+      movies => dispatch(Object.assign({type: ActionTypes.FETCH_MOVIES, movies: movies}, params))
+    );
   }
 }
 
 export function fetchMovie(movieId) {
   return (dispatch) => {
     if (!movieId) return Promise.resolve();
-    return fetch(`http://localhost:3003/api/movies/${movieId}`)
+    return fetch(`${moviesUrl}/${movieId}`)
     .then(res => res.json())
     .then(movie => dispatch({type: ActionTypes.FETCH_MOVIE, movie: movie}));
   }
@@ -44,7 +47,7 @@ export function fetchMovie(movieId) {
 export function login(data) {
   console.log("login action: ", data)
   return (dispatch) => {
-    return fetch(`http://localhost:3003/api/users/sign_in`, {
+    return fetch(userSignInUrl, {
       headers: {
         // 'Content-Type': 'application/x-www-form-urlencoded'
         'Accept': 'application/json',
@@ -52,6 +55,11 @@ export function login(data) {
       },
       method: 'POST',
       body: JSON.stringify(data)
+    }).then(res => {
+      fetchMoviesPromise().then(movies => {
+        dispatch({type: ActionTypes.FETCH_MOVIES, movies: movies})
+        browserHistory.push('/')
+      })
     })
   }
 }
@@ -59,7 +67,7 @@ export function login(data) {
 export function register(data) {
   console.log("register action: ", JSON.stringify(data))
   return (dispatch) => {
-    return fetch('http://localhost:3003/api/users/sign_up', {
+    return fetch(userSignUpUrl, {
       headers: {
         // 'Content-Type': 'application/x-www-form-urlencoded'
         'Accept': 'application/json',
@@ -67,6 +75,21 @@ export function register(data) {
       },
       method: 'POST',
       body: JSON.stringify(data)
+    }).then(res => {
+      fetchMoviesPromise().then(movies => {
+        dispatch({type: ActionTypes.FETCH_MOVIES, movies: movies})
+        browserHistory.push('/')
+      })
     })
   }
+}
+
+
+/*
+ * fetch movies promise
+ */
+function fetchMoviesPromise(params={}) {
+  let url = (params.tags === undefined ? moviesUrl :
+    `${moviesUrl}?tags=${encodeURIComponent(params.tags)}`)
+  return fetch(url).then(res => res.json())
 }
