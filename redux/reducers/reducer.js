@@ -5,7 +5,11 @@
 import * as ActionTypes from './../constants/constants'
 
 const initialState = {
-  open: false
+  open: false,
+  auth: {
+    isAuthenticated: false,
+    currentUser: {}
+  }
 }
 const RootReducer = function(state = initialState, action) {
   switch (action.type) {
@@ -22,6 +26,13 @@ const RootReducer = function(state = initialState, action) {
       })
     case ActionTypes.FETCH_MOVIE:
       return Object.assign({}, state, { movie: action.movie })
+    case ActionTypes.AUTH_USER:
+      return Object.assign({}, state, {
+        auth: {
+          isAuthenticated: !!action.user,
+          currentUser: action.user
+        }
+      })
     default:
       return state
   }

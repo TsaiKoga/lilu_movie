@@ -46,7 +46,12 @@ app.use((req, res) => {
     } else if (redirectLocation) {
       res.redirect(redirectLocation.pathname + redirectLocation.search);
     } else if (renderProps) {
-      const store = configureStore()
+      const initialState = {
+        auth: {
+          isAuthenticated: false,
+          currentUser: {}
+        }, open: false }
+      const store = configureStore(initialState)
       const state = store.getState()
       const params = Object.assign(req.query, renderProps.params)
 

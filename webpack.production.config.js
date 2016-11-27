@@ -17,7 +17,9 @@ module.exports = {
   ] : [],
   node: {
     __filename: false,
-    __dirname: false
+    __dirname: false,
+    net: 'empty',
+    dns: 'empty'
   },
   module: {
     loaders: [

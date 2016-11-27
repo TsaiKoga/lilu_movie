@@ -14,6 +14,7 @@ module.exports = {
     console: true,
     fs: 'empty',
     net: 'empty',
+    dns: 'empty',
     tls: 'empty'
   },
   module: {

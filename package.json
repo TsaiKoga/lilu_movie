@@ -28,6 +28,7 @@
     "imports-loader": "^0.6.5",
     "isomorphic-fetch": "^2.2.1",
     "json-loader": "^0.5.4",
+    "jsonwebtoken": "^7.1.9",
     "mongoose": "^4.6.0",
     "morgan": "~1.7.0",
     "multer": "^1.2.0",

@@ -2,11 +2,19 @@ import React from 'react'
 
 import AppBar from 'material-ui/AppBar'
 import Drawer from 'material-ui/Drawer'
-import MenuItem from 'material-ui/MenuItem'
+import IconButton from 'material-ui/IconButton';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import FlatButton from 'material-ui/FlatButton';
+import Toggle from 'material-ui/Toggle';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
+
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import {indigo200, indigo500, indigo900} from 'material-ui/styles/colors'
+import Avatar from 'material-ui/Avatar'
 
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
@@ -73,17 +81,48 @@ class AppLayout extends React.Component {
   renderAppBar() {
     return (
       <div>
-        <AppBar title="哩噜电影" onLeftIconButtonTouchTap={this.handleToggle} />
+        <AppBar title="哩噜电影" onLeftIconButtonTouchTap={this.handleToggle} iconElementRight={this.renderUserLogin()}/>
         <div>
           <Drawer open={this.props.open} docked={false}>
             <MenuItem key={"关闭边栏"} onTouchTap={this.handleClose}>{"关闭边栏"}</MenuItem>
             {this.renderMenuItems()}
-            <MenuItem key={"Login"} href='/users/login'>{"登录"}</MenuItem>
-            <MenuItem key={"Register"} href='/users/register'>{"注册"}</MenuItem>
           </Drawer>
         </div>
       </div>
     )
+  }
+
+  renderUserLogin() {
+    const { isAuthenticated, currentUser } = this.props.auth
+    let loginBtn
+
+    if (isAuthenticated) {
+      loginBtn = (
+        <IconMenu
+          iconButtonElement={
+            <IconButton><Avatar src="" /></IconButton>
+          }
+          targetOrigin={{horizontal: 'right', vertical: 'top'}}
+          anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+        >
+          <MenuItem key={"Logout"} href='/users/logout'>{"登  出"}</MenuItem>
+        </IconMenu>
+      )
+    } else {
+      loginBtn = (
+        <IconMenu
+          iconButtonElement={
+            <IconButton><MoreVertIcon /></IconButton>
+          }
+          targetOrigin={{horizontal: 'right', vertical: 'top'}}
+          anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+        >
+          <MenuItem key={"Login"} href='/users/login'>{"登  录"}</MenuItem>
+          <MenuItem key={"Register"} href='/users/register'>{"注  册"}</MenuItem>
+        </IconMenu>
+      )
+    }
+    return <div>{ loginBtn }</div>
   }
 
   render() {
@@ -104,9 +143,15 @@ AppLayout.need = [function (params) {
   return Actions.handleClose.bind(null)();
 }]
 
+AppLayout.propTypes = {
+  auth: React.PropTypes.object.isRequired
+}
+
 function mapStateToProps(store) {
+  console.log("mapStateToProps: ", store.auth)
   return {
-    open: store.open
+    open: store.open,
+    auth: store.auth
   }
 }
 

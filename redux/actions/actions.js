@@ -1,6 +1,7 @@
 import fetch from "isomorphic-fetch"
 import * as ActionTypes from './../constants/constants'
 import { browserHistory } from 'react-router'
+import jwt from 'jsonwebtoken'
 
 const moviesUrl = "http://localhost:3003/api/movies"
 const userSignInUrl = "http://localhost:3003/api/users/sign_in"
@@ -55,8 +56,11 @@ export function login(data) {
       },
       method: 'POST',
       body: JSON.stringify(data)
-    }).then(res => {
+    }).then(res => res.json()).then(tokenObj => {
+      const token = tokenObj.token
+      localStorage.setItem('jwtToken', token)
       fetchMoviesPromise().then(movies => {
+        dispatch(setCurrentUser(jwt.decode(token)))
         dispatch({type: ActionTypes.FETCH_MOVIES, movies: movies})
         browserHistory.push('/')
       })
@@ -75,8 +79,11 @@ export function register(data) {
       },
       method: 'POST',
       body: JSON.stringify(data)
-    }).then(res => {
+    }).then(res => res.json()).then(tokenObj => {
+      const token = tokenObj.token
+      localStorage.setItem('jwtToken', token)
       fetchMoviesPromise().then(movies => {
+        dispatch(setCurrentUser(jwt.decode(token)))
         dispatch({type: ActionTypes.FETCH_MOVIES, movies: movies})
         browserHistory.push('/')
       })
@@ -84,6 +91,12 @@ export function register(data) {
   }
 }
 
+export function setCurrentUser(user) {
+  return {
+    type: 'AUTH_USER',
+    user: user
+  }
+}
 
 /*
  * fetch movies promise

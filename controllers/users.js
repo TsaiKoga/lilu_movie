@@ -1,4 +1,6 @@
 var bcrypt = require('bcrypt');
+var jwt = require('jsonwebtoken');
+var config = require('./../config.js');
 // Create a password salt
 var salt = bcrypt.genSaltSync(10);
 
@@ -14,7 +16,12 @@ exports.signIn = function(req, res, next) {
       user.authenticate(req.body.password, function(err, isMatch) {
         if (err) return res.status(404).json({error: err});
         if (isMatch) {
-          res.status(200).json({user: user.toJSON()});
+          var token = jwt.sign({
+            id: user._id,
+            name: user.name,
+            email: user.email
+          }, config.jwtSecret);
+          res.status(200).json({token});
         } else {
           res.json({ errors:
             { message:"邮箱或密码错误" }
@@ -40,7 +47,7 @@ exports.signUp = function(req, res, next) {
       if (err) {
         res.status(404).json({errors: err});
       } else {
-        res.status(200).json({user: user.toJSON()});
+        res.status(200).json({token});
       }
     });
   });
