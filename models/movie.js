@@ -1,7 +1,15 @@
 var mongoose = require("mongoose");
 var config = require("./../config");
+
 // 连接数据库
-var db = mongoose.createConnection(config.db.mongoose);
+var dbUsername = process.env.MONGOLAB_USERNAME;
+var dbPassword = process.env.MONGOLAB_PASSWORD;
+var db;
+if (process.env.NODE_ENV === 'production') {
+  db = mongoose.createConnection("mongodb://" + dbUsername + ":" + dbPassword + config.db.mongolab);
+} else {
+  db = mongoose.createConnection(config.db.mongoose);
+}
 
 // 链接错误
 db.on('error', function(error) {
