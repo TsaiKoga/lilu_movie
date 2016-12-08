@@ -18,6 +18,7 @@ import configureStore from "./redux/configureStore"
 import usersController from "./controllers/users"
 import moviesController from "./controllers/movies"
 import { fetchComponentDataBeforeRender } from './redux/fetchComponentDataBeforeRender'
+import config from "./config"
 
 
 const app = express()
@@ -72,6 +73,13 @@ app.use((req, res) => {
 })
 
 // 渲染页面
+var serverHost
+if (process.env.NODE_ENV === "heroku") {
+  serverHost = "lilumovie.herokuapp.com"
+} else {
+  serverHost = "localhost:3003"
+}
+const PORT = process.env.PORT || "3003"
 const renderFullPage = (appHtml, initialState) => {
   return `
   <!DOCTYPE html>
@@ -98,14 +106,13 @@ const renderFullPage = (appHtml, initialState) => {
   </body>
 
   <script type="text/javascript" src="http://localhost:8080/javascripts/bundle.js" charset="utf-8"></script>
-  <script type="text/javascript" src="http://localhost:3003/javascripts/common.js" charset="utf-8"></script>
-  <script type="text/javascript" src="http://localhost:3003/javascripts/bundle.js" charset="utf-8"></script>
+  <script type="text/javascript" src="http://${serverHost}/javascripts/common.js" charset="utf-8"></script>
+  <script type="text/javascript" src="http://${serverHost}/javascripts/bundle.js" charset="utf-8"></script>
   </html>
   `
 }
 
 // 服务监听
-const PORT = process.env.PORT || 3003;
 const server = app.listen(PORT, () => {
   let host = server.address().address
   let port = server.address().port

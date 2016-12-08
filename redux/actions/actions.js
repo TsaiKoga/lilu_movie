@@ -3,9 +3,16 @@ import * as ActionTypes from './../constants/constants'
 import { browserHistory } from 'react-router'
 import jwt from 'jsonwebtoken'
 
-const moviesUrl = "http://localhost:3003/api/movies"
-const userSignInUrl = "http://localhost:3003/api/users/sign_in"
-const userSignUpUrl = "http://localhost:3003/api/users/sign_up"
+var moviesUrl, userSignInUrl, userSignUpUrl
+if (process.env.NODE_ENV === "heroku") {
+  moviesUrl = "http://lilumovie.herokuapp.com/api/movies"
+  userSignInUrl = "http://lilumovie.herokuapp.com/api/users/sign_in"
+  userSignUpUrl = "http://lilumovie.herokuapp.com/api/users/sign_up"
+} else {
+  moviesUrl = "http://localhost:3003/api/movies"
+  userSignInUrl = "http://localhost:3003/api/users/sign_in"
+  userSignUpUrl = "http://localhost:3003/api/users/sign_up"
+}
 
 export function toggleDrawer(open) {
   return {

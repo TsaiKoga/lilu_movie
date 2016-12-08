@@ -3,12 +3,18 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
+    "heroku-postbuild": "npm run build:client && npm run build:server",
+    "start": "node server.bundle.js",
     "start:dev": "webpack-dev-server --inline --content-base public/ --history-api-fallback",
     "start:prod": "npm run build && node server.bundle.js",
-    "build:client": "webpack --config ./webpack.production.config.js",
-    "build:server": "webpack --config webpack.server.config.js",
-    "build": "npm run build:client && npm run build:server"
+    "build:client": "webpack --config webpack.production.config.js --progress --color",
+    "build:server": "webpack --config webpack.server.config.js --progress --color",
+    "build": "npm run build:client && npm run build:server",
+    "create:data": "node spider.js"
+  },
+  "engines": {
+    "node": "5.8.0",
+    "npm": "3.7.3"
   },
   "dependencies": {
     "bcrypt": "^0.8.7",
@@ -29,13 +35,18 @@
     "isomorphic-fetch": "^2.2.1",
     "json-loader": "^0.5.4",
     "jsonwebtoken": "^7.1.9",
+    "material-ui": "^0.16.4",
     "mongoose": "^4.6.0",
     "morgan": "~1.7.0",
     "multer": "^1.2.0",
     "per-env": "^1.0.2",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
     "react-redux": "^4.4.5",
     "react-router": "^3.0.0",
+    "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0",
+    "redux-devtools": "^3.3.1",
     "redux-logger": "^2.7.4",
     "redux-thunk": "^2.1.0",
     "serve-favicon": "~2.3.0",

@@ -5,7 +5,7 @@ var config = require("./../config");
 var dbUsername = process.env.MONGOLAB_USERNAME;
 var dbPassword = process.env.MONGOLAB_PASSWORD;
 var db;
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'heroku') {
   db = mongoose.createConnection("mongodb://" + dbUsername + ":" + dbPassword + config.db.mongolab);
 } else {
   db = mongoose.createConnection(config.db.mongoose);
