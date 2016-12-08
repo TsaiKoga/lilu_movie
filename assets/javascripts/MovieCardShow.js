@@ -18,7 +18,7 @@ class MovieCardShow extends React.Component {
     if (text) {
       let lines = text.split(/\r\n/)
       let formatted = lines.map((line) => {
-        return (<p>{line}</p>)
+        return (<p key={line}>{line}</p>)
       })
       return (<div>{formatted}</div>)
     }

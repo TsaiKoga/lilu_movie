@@ -36,6 +36,7 @@ export function toggleExpanded(expanded) {
 }
 
 export function fetchMovies(params={}) {
+  console.log("ckj fetch movies:==========")
   return (dispatch) => {
     return fetchMoviesPromise(params).then(
       movies => dispatch(Object.assign({type: ActionTypes.FETCH_MOVIES, movies: movies}, params))
@@ -76,7 +77,8 @@ export function login(data) {
 }
 
 export function register(data) {
-  console.log("register action: ", JSON.stringify(data))
+  console.log(window.ckj=process.env)
+  console.log(`register action: ${userSignUpUrl}`, JSON.stringify(data))
   return (dispatch) => {
     return fetch(userSignUpUrl, {
       headers: {
@@ -95,6 +97,13 @@ export function register(data) {
         browserHistory.push('/')
       })
     })
+  }
+}
+
+export function logout() {
+  return dispatch => {
+    localStorage.removeItem('jwtToken')
+    dispatch(setCurrentUser({}))
   }
 }
 

@@ -21,6 +21,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 import MoviesGridList from './MoviesGridList'
 import MovieCardShow from './MovieCardShow'
 
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as Actions from './../../redux/actions/actions'
 
@@ -67,6 +68,10 @@ class AppLayout extends React.Component {
     this.handleClose = () => (
       this.props.dispatch(Actions.handleClose())
     )
+    this.logout = (e) => {
+      e.preventDefault
+      this.props.dispatch(Actions.logout())
+    }
   }
 
   renderMenuItems() {
@@ -105,7 +110,7 @@ class AppLayout extends React.Component {
           targetOrigin={{horizontal: 'right', vertical: 'top'}}
           anchorOrigin={{horizontal: 'right', vertical: 'top'}}
         >
-          <MenuItem key={"Logout"} href='/users/logout'>{"登  出"}</MenuItem>
+          <MenuItem key={"Logout"} onTouchTap={this.logout}>{"登  出"}</MenuItem>
         </IconMenu>
       )
     } else {
@@ -122,7 +127,7 @@ class AppLayout extends React.Component {
         </IconMenu>
       )
     }
-    return <div>{ loginBtn }</div>
+    return loginBtn
   }
 
   render() {
@@ -140,7 +145,7 @@ class AppLayout extends React.Component {
 }
 
 AppLayout.need = [function (params) {
-  return Actions.handleClose.bind(null)();
+  return Actions.handleClose.bind(null)()
 }]
 
 AppLayout.propTypes = {
@@ -154,7 +159,6 @@ function mapStateToProps(store) {
     auth: store.auth
   }
 }
-
 
 /* 生成一个AppLayout容器组件
  * 这里可以使用redux的API

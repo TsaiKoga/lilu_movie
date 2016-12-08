@@ -16,4 +16,4 @@ This is my first time to develop a website with nodejs.
     npm run insert:data
 
 ### run app
-    NODE_ENV=production npm start
+    npm run start:prod
