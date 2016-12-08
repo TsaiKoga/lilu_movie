@@ -47,6 +47,11 @@ exports.signUp = function(req, res, next) {
       if (err) {
         res.status(404).json({errors: err});
       } else {
+        var token = jwt.sign({
+          id: user._id,
+          name: user.name,
+          email: user.email
+        }, config.jwtSecret);
         res.status(200).json({token});
       }
     });

@@ -30,7 +30,7 @@ export function toggleExpanded(expanded) {
 
 export function fetchMovies(params={}) {
   return (dispatch) => {
-    return fetchMoviesPromise().then(
+    return fetchMoviesPromise(params).then(
       movies => dispatch(Object.assign({type: ActionTypes.FETCH_MOVIES, movies: movies}, params))
     );
   }
