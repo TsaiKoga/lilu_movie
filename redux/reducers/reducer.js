@@ -3,6 +3,7 @@
  * 用来根据生成新的state
  */
 import * as ActionTypes from './../constants/constants'
+import { isEmpty } from './../../utils/isEmpty'
 
 const initialState = {
   open: false,
@@ -27,9 +28,10 @@ const RootReducer = function(state = initialState, action) {
     case ActionTypes.FETCH_MOVIE:
       return Object.assign({}, state, { movie: action.movie })
     case ActionTypes.AUTH_USER:
+      console.log("auth user: ", !isEmpty(action.user))
       return Object.assign({}, state, {
         auth: {
-          isAuthenticated: !!action.user,
+          isAuthenticated: !isEmpty(action.user),
           currentUser: action.user
         }
       })
