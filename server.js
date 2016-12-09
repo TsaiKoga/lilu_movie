@@ -64,10 +64,10 @@ app.use((req, res) => {
             <RouterContext {...renderProps} />
           </Provider>
         )
-        res.end(renderFullPage(html, store.getState()));
+        res.send(renderFullPage(html, store.getState()));
       })
     } else {
-      res.status(404).end('Not found');
+      res.status(404).send('Not found');
     }
   })
 })
@@ -75,14 +75,14 @@ app.use((req, res) => {
 // 渲染页面
 var serverHost
 if (process.env.NODE_ENV === "heroku") {
-  serverHost = "lilumovie.herokuapp.com"
+  serverHost = config.heroku.host
 } else {
-  serverHost = "localhost:3003"
+  serverHost = config.dev.host + ":" + config.dev.defaultPort
 }
 const PORT = process.env.PORT || "3003"
 const renderFullPage = (appHtml, initialState) => {
   return `
-  <!DOCTYPE html>
+  <!doctype html public="storage">
   <html lang="en">
   <head>
     <meta charset="utf-8">

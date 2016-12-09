@@ -9,7 +9,12 @@ module.exports = {
     path: path.resolve(__dirname, "public/javascripts"),
     filename: "bundle.js"
   },
-  plugins: process.env.NODE_ENV === 'production' ? [
+  plugins: (process.env.NODE_ENV === 'heroku') ? [
+    new webpack.DefinePlugin({
+      'process.env':{
+        'NODE_ENV': JSON.stringify('heroku')
+      }
+    }),
     new webpack.optimize.DedupePlugin(),                  // 有些JS库有自己的依赖树，并且这些库可能有交叉的依赖，DedupePlugin可以找出他们并删除重复的依赖
     new webpack.optimize.OccurrenceOrderPlugin(),         //
     new webpack.optimize.CommonsChunkPlugin('common.js'), // 提取多个入口文件的公共脚本部分，然后生成一个 common.js 来方便多页面之间进行复用

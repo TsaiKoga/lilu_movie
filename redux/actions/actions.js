@@ -2,16 +2,17 @@ import fetch from "isomorphic-fetch"
 import * as ActionTypes from './../constants/constants'
 import { browserHistory } from 'react-router'
 import jwt from 'jsonwebtoken'
+import config from './../../config'
 
 var moviesUrl, userSignInUrl, userSignUpUrl
 if (process.env.NODE_ENV === "heroku") {
-  moviesUrl = "http://lilumovie.herokuapp.com/api/movies"
-  userSignInUrl = "http://lilumovie.herokuapp.com/api/users/sign_in"
-  userSignUpUrl = "http://lilumovie.herokuapp.com/api/users/sign_up"
+  moviesUrl = `http://${config.heroku.host}/api/movies`
+  userSignInUrl = `http://${config.heroku.host}/api/users/sign_in`
+  userSignUpUrl = `http://${config.heroku.host}/api/users/sign_up`
 } else {
-  moviesUrl = "http://localhost:3003/api/movies"
-  userSignInUrl = "http://localhost:3003/api/users/sign_in"
-  userSignUpUrl = "http://localhost:3003/api/users/sign_up"
+  moviesUrl = `http://${config.dev.host}:${config.dev.defaultPort}/api/movies`
+  userSignInUrl = `http://${config.dev.host}:${config.dev.defaultPort}/api/users/sign_in`
+  userSignUpUrl = `http://${config.dev.host}:${config.dev.defaultPort}/api/users/sign_up`
 }
 
 export function toggleDrawer(open) {
@@ -77,8 +78,6 @@ export function login(data) {
 }
 
 export function register(data) {
-  console.log(window.ckj=process.env)
-  console.log(`register action: ${userSignUpUrl}`, JSON.stringify(data))
   return (dispatch) => {
     return fetch(userSignUpUrl, {
       headers: {
