@@ -9,6 +9,7 @@ import FlatButton from 'material-ui/FlatButton';
 import Toggle from 'material-ui/Toggle';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import { Link } from 'react-router'
 
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
@@ -69,7 +70,7 @@ class AppLayout extends React.Component {
       this.props.dispatch(Actions.handleClose())
     )
     this.logout = (e) => {
-      e.preventDefault
+      e.preventDefault()
       this.props.dispatch(Actions.logout())
     }
   }
@@ -78,7 +79,7 @@ class AppLayout extends React.Component {
     let self = this
     return(
       Tags.map((tagName) => (
-        <MenuItem key={tagName} href={`/movies?tags=${tagName}`} >{tagName}</MenuItem>
+        <MenuItem key={tagName} containerElement={<Link to={ {pathname: '/movies', query: { tags: tagName }} }/>}>{tagName}</MenuItem>
       ))
     )
   }
@@ -122,8 +123,8 @@ class AppLayout extends React.Component {
           targetOrigin={{horizontal: 'right', vertical: 'top'}}
           anchorOrigin={{horizontal: 'right', vertical: 'top'}}
         >
-          <MenuItem key={"Login"} href='/users/login'>{"登  录"}</MenuItem>
-          <MenuItem key={"Register"} href='/users/register'>{"注  册"}</MenuItem>
+          <MenuItem key={"Login"} containerElement={<Link to="/users/login" />}>{"登  录"}</MenuItem>
+          <MenuItem key={"Register"} containerElement={<Link to="/users/register" />}>{"注  册"}</MenuItem>
         </IconMenu>
       )
     }

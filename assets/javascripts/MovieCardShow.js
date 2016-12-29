@@ -3,6 +3,7 @@ import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'm
 import Toggle from 'material-ui/Toggle'
 import { connect } from 'react-redux'
 import * as Actions from '../../redux/actions/actions'
+import { getMovie } from '../../redux/reducers/reducer'
 
 class MovieCardShow extends React.Component {
   constructor(props, context) {
@@ -62,10 +63,17 @@ MovieCardShow.need = [function (params) {
   return Actions.fetchMovie.bind(null, params.id)();
 }]
 
-function mapStateToProps(store) {
+function mapStateToProps(state, props) {
+  let movie
+  if (state.movie === undefined) {
+    // 这里如果不是通过server端而是直接通过react-router的link过来的，通过reducer从movies中直接获取数据
+    movie = getMovie(state, props.params.id)
+  } else {
+    movie = state.movie
+  }
   return {
-    expanded: store.expanded,
-    movie: store.movie
+    expanded: state.expanded,
+    movie: movie
   }
 }
 

@@ -41,3 +41,5 @@ const RootReducer = function(state = initialState, action) {
 }
 
 export default RootReducer
+export const getMovie = (state, id) => state.movies.filter(movie => movie._id === id)[0];
+export const getMoviesByTag = (state, tags) => state.movies.filter(movie => movie.tags.indexOf(tags) != -1)

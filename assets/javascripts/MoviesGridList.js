@@ -3,8 +3,10 @@ import {GridList, GridTile} from 'material-ui/GridList'
 import IconButton from 'material-ui/IconButton'
 import Subheader from 'material-ui/Subheader'
 import StarBorder from 'material-ui/svg-icons/toggle/star-border'
+import { Link } from 'react-router'
+import { getMoviesByTag } from '../../redux/reducers/reducer'
 
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import * as Actions from '../../redux/actions/actions'
 
 const GridStyles = {
@@ -27,7 +29,7 @@ class MoviesGridList extends React.Component {
 
   renderMovieGrid(movie) {
     return (
-      <a key={`link${movie._id}`} href={`/movies/${movie._id}`}>
+      <Link key={`link${movie._id}`} to={`/movies/${movie._id}`}>
         <GridTile
           key={movie._id}
           title={movie.title}
@@ -36,7 +38,7 @@ class MoviesGridList extends React.Component {
         >
           <img src={movie.img}/>
         </GridTile>
-      </a>
+      </Link>
     )
   }
 
@@ -62,10 +64,17 @@ MoviesGridList.need = [function (params) {
 }]
 
 // 将store最新的state.movies给props，
-function mapStateToProps(store) {
+function mapStateToProps(state, props) {
+  let tags = props.location.query.tags
+  let movies
+  if (tags === undefined) {
+    movies = state.movies
+  } else {
+    movies = getMoviesByTag(state, tags)
+  }
   return {
-    tags: store.tags,
-    movies: store.movies
+    tags: tags,
+    movies: movies
   }
 }
 
