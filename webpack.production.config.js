@@ -27,19 +27,19 @@ module.exports = {
     dns: 'empty'
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.css$/,
-        loader: "style-loader!css-loader"
+        use: [ "style-loader", "css-loader" ]
       }, {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: "babel",
-        query: { presets: ['react', 'es2015'] }
+        use: {
+            loader: "babel-loader",
+            query: { presets: [ "@babel/preset-env", "@babel/preset-react" ] }
+        }
       }, {
-        test: /.json$/, loader: 'json-loader'
-      }, {
-        test: /.node$/, loader: 'node-loader'
+        test: /.node$/, use: 'node-loader'
       }]
   }
 };

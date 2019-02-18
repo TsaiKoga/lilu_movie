@@ -6,7 +6,7 @@ import RegisterForm from './RegisterForm'
 import MoviesGridList from './MoviesGridList'
 import MovieCardShow from './MovieCardShow'
 
-module.exports = (
+const routes = (
   <Route path="/" component={AppLayout}>
     <IndexRoute component={MoviesGridList} />
     <Route path="/movies" component={MoviesGridList} />
@@ -15,3 +15,4 @@ module.exports = (
     <Route path="/users/register" component={RegisterForm}/>
   </Route>
 )
+export default routes
